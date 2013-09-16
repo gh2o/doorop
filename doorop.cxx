@@ -116,6 +116,9 @@ class SPIGuard
 class MFRC522
 {
 	public:
+#include "mfrc522.h"
+
+	public:
 	static uint8_t readRegister(uint8_t reg)
 	{
 		SPIGuard guard(PORTB, 2);
@@ -137,6 +140,8 @@ class MFRC522
 		// setup MFRC522
 		PORTB |= 1 << 2;
 		DDRB |= 1 << 2;
+
+		writeRegister(kCommandReg, kCommandNoCmdChange);
 	}
 };
 
@@ -146,7 +151,11 @@ int main()
 	SPI::init();
 	MFRC522::init();
 
+	/*
 	puts_P(PSTR("doing register dump:"));
 	for (uint8_t i = 0; i < 0x40; i++)
 		printf_P(PSTR("0x%02x: 0x%02x\n"), i, MFRC522::readRegister(i));
+	*/
+
+	MFRC522::writeRegister(MFRC522::kBitFramingReg, 7 << MFRC522::kBitFramingRegTxLastBitsShift);
 }

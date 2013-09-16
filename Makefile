@@ -8,8 +8,8 @@ all: $(PROGNAME).bin
 $(PROGNAME).bin: $(PROGNAME).elf
 	avr-objcopy -O binary $^ $@
 
-$(PROGNAME).elf: $(PROGNAME).cxx
-	avr-g++ $^ -o $@ $(CFLAGS) $(LDFLAGS)
+$(PROGNAME).elf: $(PROGNAME).cxx $(wildcard *.h)
+	avr-g++ $< -o $@ $(CFLAGS) $(LDFLAGS)
 
 flash: $(PROGNAME).bin
 	avrdude -c usbasp -p atmega328 \
